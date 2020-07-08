@@ -15,6 +15,13 @@ char set = '_';
 char ott = '_';
 char nov = '_';
 
+void stampaTabellone()
+{
+	printf("_%c_|_%c_|_%c_\n",uno,due,tre);
+	printf("_%c_|_%c_|_%c_\n",qua,cin,sei);
+	printf("_%c_|_%c_|_%c_\n\n",set,ott,nov);
+}
+
 int controllaVittoria(char uno,char due,char tre,char qua,char cin,char sei,char set,char ott,char nov)
 {
 	//Casi di vittoria
@@ -66,18 +73,19 @@ int controllaInserimento(char posto, char giocatore)
 	//Se <la cella non è vuota> E <la cella è diversa dal giocatore corrente>
 	if(posto!='_' || posto==giocatore)
 	{
-		printf("Questa cella non può essere occupata!\n");
+		printf("\n=== Questa cella non può essere occupata! ===\n\n");
 		return 1;
 	//La cella selezionata è già del giocatore
 	}
 	return 0;
 }
 
-void controllaPareggio()
+//Controlla che tutte le caselle siano state occupate e che nessuno dei giocatori abbia vinto
+void controllaPareggio(int vittoria)
 {
-	if(uno!='_' && due!='_' && tre!='_' && qua!='_' && cin!='_' && sei!='_' && set!='_' && ott!='_' && nov!='_')
+	if((uno!='_' && due!='_' && tre!='_' && qua!='_' && cin!='_' && sei!='_' && set!='_' && ott!='_' && nov!='_') && vittoria==0)
 	{
-		printf("\nLa partità è finita in parità, resetto il tabellone\n");
+		printf("\n=== La partità è finita in parità, resetto il tabellone ===\n");
 		uno='_';
 		due='_';
 		tre='_';
@@ -90,6 +98,8 @@ void controllaPareggio()
 	}
 }
 
+//Riempi la casella corrispondente a quella scelta dall'utente e fai finire il turno
+//impostando turnoFinito a 1
 void segnaPosto(int posto, char giocatore)
 {
 	switch(posto)
@@ -122,11 +132,9 @@ void segnaPosto(int posto, char giocatore)
 			if(controllaInserimento(nov,giocatore)==0){nov=giocatore; turnoFinito=1;}
 			break;
 		default:
-			printf("Opzione invalida, scegli un numero da 1 a 9");
+			printf("\nOpzione invalida, scegli un numero da 1 a 9\n\n");
 			break;
 	}
-
-	return void;
 }
 
 
@@ -134,9 +142,7 @@ int main()
 {
 	//Stampa iniziale del tabellone di gioco, questa parte non si ripeterà
 	printf("Tabella di gioco:\n\n");
-	printf("_%c_|_%c_|_%c_\n",uno,due,tre);
-	printf("_%c_|_%c_|_%c_\n",qua,cin,sei);
-	printf("_%c_|_%c_|_%c_\n",set,ott,nov);
+	stampaTabellone();
 	printf("Il giocatore 1: X\n");
 	printf("Il giocatore 2: O\n\n");
 	
@@ -146,55 +152,54 @@ int main()
 	while(vittoria==0){
 
 		//Turno del giocatore 1
-		do
+		if(vittoria==0)
 		{
-			printf("Giocatore 1, fai la tua scelta: ");
-			scanf("%d",&X);
-			
-			//Riempi la casella corrispondente a quella scelta dall'utente e fai finire il turno
-			//impostando turnoFinito a 1
-			segnaPosto(X,'X');
+			do
+			{
+				printf("Giocatore 1, fai la tua scelta: ");
+				scanf("%d",&X);
+				
+				segnaPosto(X,'X');
 
-		}while(turnoFinito!=1);
+			}while(turnoFinito!=1);
+		}
 		
 		//Reimposta la variabile del turno
 		turnoFinito=0;
 		//Controlla la situazione attuale del tabellone
-		controllaPareggio();
+		controllaPareggio(vittoria);
 		
 		//Stampa del tabellone attuale
-		printf("_%c_|_%c_|_%c_\n",uno,due,tre);
-		printf("_%c_|_%c_|_%c_\n",qua,cin,sei);
-		printf("_%c_|_%c_|_%c_\n\n\n\n",set,ott,nov);
+		stampaTabellone();
 		
 		//Se la partita è stata vinta da uno dei giocatori, interrompi il ciclo
-		if(controllaVittoria(uno,due,tre,qua,cin,sei,set,ott,nov)==1)
-		{
-			break;
-		}
-		
-		//Turno del Giocatore 2
-		do
-		{
-			printf("Giocatore 2, fai la tua scelta: ");
-			scanf("%d",&O);
-			
-			segnaPosto(O,'O');
-			}
-		}while(turnoFinito!=1);
-		
-		turnoFinito=0;
-		controllaPareggio();
-		
-		printf("_%c_|_%c_|_%c_\n",uno,due,tre);
-		printf("_%c_|_%c_|_%c_\n",qua,cin,sei);
-		printf("_%c_|_%c_|_%c_\n\n\n\n",set,ott,nov);
-		
 		if(controllaVittoria(uno,due,tre,qua,cin,sei,set,ott,nov)==1)
 		{
 			vittoria=1;
 		}
 		
+		//Turno del Giocatore 2
+		if(vittoria==0)
+		{
+			do
+			{
+				printf("Giocatore 2, fai la tua scelta: ");
+				scanf("%d",&O);
+				
+				segnaPosto(O,'O');
+
+			}while(turnoFinito!=1);
+		}
+		
+		turnoFinito=0;
+		controllaPareggio(vittoria);
+		
+		stampaTabellone();
+		
+		if(controllaVittoria(uno,due,tre,qua,cin,sei,set,ott,nov)==1)
+		{
+			vittoria=1;
+		}
 	}
 	return 0;
 }
