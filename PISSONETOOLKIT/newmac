@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#Saverio 07/07/2020
+
+YLW='\033[1;33m' #Yellow
+NOC='\033[0m'	 #No Color
+
+# getopts ottiene tutte le opzioni specificate nel comando, in questo caso cerchiamo -h
+while getopts ":h" option; do
+	case $option in
+		h) #Display help screen
+			printf "Change MAC address of specified device to a random one\n"
+			printf "Usage: newmac device\n\n"
+
+			printf "   -h,    --help\t Print this help screen\n"
+			exit 0
+			;;
+		*) #Default option
+			printf "Option not recognized\n"
+			exit 1
+			;;
+	esac
+done
+
+# In caso l'utente non sia root o non usi sudo si usa questa espressione per segnalarlo all utente
+if [[ $EUID -ne 0 ]]; then
+	printf "You must be root or use sudo to run this program\n"
+	exit 1
+fi
+
+# Input richiesto (specificato con il punto di domanda), in caso non ci sia valore viene stampato un errore
+DEVICE=${1?Error: no device given}
+
+# Stampa il dispositivo scelto
+printf "${YLW}Device chosen:${NOC} $DEVICE\n"
+
+# Spegne il dispositivo
+ifconfig $DEVICE down
+
+# Nuovo MAC random
+macchanger -r $DEVICE
+
+# Riaccende il dispositivo
+ifconfig $DEVICE up
+
+exit 0
