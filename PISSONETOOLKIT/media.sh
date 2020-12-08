@@ -1,9 +1,9 @@
 #!/bin/bash
 
-declare -i totale=0
-declare -i numInseriti=0
-declare camadimma=0.0
-declare -i n
+declare totale=0
+declare numInseriti=0
+declare media=0.0
+declare n
 
 RED='\033[1;31m' #RED
 BLU='\033[1;34m' #BLU
@@ -12,31 +12,44 @@ NOC='\033[0m'	 #NO COLOR
 GRE='\033[1;32m' #GREEN
 NUMINSERITI=""
 
+function stampaTitolo() {
+	
+	clear
+	printf "Per terminare il programma inserisci ${GRE}x${NOC}\n\n"
+
+	if [[ "$1" == "valid" ]]; then
+		printf "Numeri inseriti: ${BLU}$NUMINSERITI${NOC}\n\n"
+	else
+		printf "${RED}Input invalido${NOC}\n\n"
+	fi
+
+}
+
 while :
 do
-clear
-printf "Per smettere di inserire numeri inserisci lo ${GRE}0${NOC}\n\n"
-if test numInseriti!=0
-then
-	NUMINSERITI="$NUMINSERITI $n"
-	printf "Numeri inseriti: ${BLU}$NUMINSERITI${NOC}\n"
-	printf "Ultimo numero inserito: ${RED}$n${NOC}\n"
-fi
-#Viene letto l'input dell'utente e confrontato con i casi possibili presentati anche nel menu
-read -p "Inserisci un numero: " n
-printf "\n"
-case $n in
-0)
-	printf "${YLW}--${NOC} Somma dei numeri inseriti: ${YLW}$totale${NOC}\n"
-	printf "${YLW}--${NOC} Numero di numeri inseriti: ${YLW}$numInseriti${NOC}\n"
-	camadimma=$(( totale / numInseriti ))
-	printf "${YLW}--${NOC} Media dei numeri inseriti: ${YLW}$camadimma${NOC}\n"
-	break
-	;;
-*)
-	numInseriti=$numInseriti+1
-	totale=$(( totale + n ))	
-	;;
-esac
+	#Viene letto l'input dell'utente
+	read -p "Inserisci un numero: " n
+	printf "\n"
+
+	case $n in
+		#termina il programma
+		'x')
+			stampaTitolo "valid"
+			media=$(bc <<< "scale=2;$totale/$numInseriti")
+			printf "${BLU}$totale${NOC} ${YLW}/${NOC} ${BLU}$numInseriti${NOC} ${YLW}=${NOC} ${GRE}$media${NOC}\n\n"
+			break
+			;;
+		#controlla l'input inserito, visualizza l'errore
+		*)
+			if ! [[ $n =~ ^[+-]?[0-9]+$ ]]; then
+				stampaTitolo "invalid"
+			else
+				numInseriti=$(( numInseriti+1 ))
+				totale=$(( totale + n ))
+				NUMINSERITI="$NUMINSERITI $n"
+				stampaTitolo "valid"
+			fi
+			;;
+	esac
 
 done
