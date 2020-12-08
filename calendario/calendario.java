@@ -12,39 +12,35 @@ class calendario
 
 	static Scanner input = new Scanner(System.in);
 
-	public static void main(String args[])
-	{
+	public static void main(String args[]) {
 		System.out.println("Vuoi leggere dal file [l|L] o scriverci [s|S]?");
 
 		char scelta = input.nextLine().charAt(0);
 		
-		boolean scrivi=false;
-		boolean leggi=false;
+		boolean scrivi = false;
+		boolean leggi = false;
 
-		switch(scelta)
-		{
+		switch (scelta) {
 		case 's':
 		case 'S':
-			scrivi=true;
-			leggi=false;
+			scrivi = true;
+			leggi = false;
 			break;
 		case 'l':
 		case 'L':
-			leggi=true;
-			scrivi=false;
+			leggi = true;
+			scrivi = false;
 			break;
 		default:
-			leggi=true;
-			scrivi=false;
+			leggi = true;
+			scrivi = false;
 			System.out.println("Carattere inserito errato!");
 			System.exit(1);
 			break;
 		}
 
-		if(scrivi==true && leggi==false)
-		{
-			try
-			{
+		if (scrivi == true && leggi == false) {
+			try {
 				File file = new File("memoria.txt");
 				FileWriter fw = new FileWriter(file, true);
 				FileReader fr = new FileReader("id.txt");
@@ -69,24 +65,19 @@ class calendario
 				fw.write((String)Integer.toString(id+1));
 				fw.close();
 
-			}catch(Exception e)
-			{
+			}catch(Exception e) {
 				System.out.println("Errore: " + e);
 			}
-		}else if(scrivi==false && leggi==true)
-		{
-			try
-			{
+		}else if(scrivi==false && leggi==true) {
+			try {
 				File file = new File("memoria.txt");
 				Scanner sc = new Scanner(file);
-				while(sc.hasNextLine())
-				{
+				while(sc.hasNextLine()) {
 					String line = sc.nextLine();
 					System.out.println(line);
 
 				}
-			}catch(Exception e)
-			{
+			}catch(Exception e) {
 				System.out.println("Errore: "+e);
 			}
 		}
