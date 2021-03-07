@@ -37,6 +37,7 @@ read -p "Choose what to do [1|4] " choice
 #Viene letto l'input dell'utente e confrontato con i casi possibili presentati anche nel menu
 case $choice in
 1)
+	# data e ora
 	printf "Today is $(date)"
 	printf "\n"
 	read -p "Press [Enter] to continue "
@@ -44,6 +45,7 @@ case $choice in
 	readEnterKey
 	;;
 2)
+	# processi attivi
 	w
 	printf "\n"
 	read -p "Press [Enter] to continue "
@@ -51,18 +53,20 @@ case $choice in
 	readEnterKey
 	;;
 3)
+	# nuovo hostname
 	printf "\n"
-	
 	printf "Old hostname: ${HRED}"
 	hostname
 	printf "${NOC}\n"
 	read -p "Type in your new hostname: " newName
-	sudo hostname -b $newName
+	sudo hostnamectl set-hostname $newName
+	# sudo hostname -b $newName
 	printf "\n"
 	read -p "Press [Enter] to continue "
 	readEnterKey
 	;;
 4)
+	# salutis
 	printf "Bye!"
 	printf "\n"
 	exit 0
