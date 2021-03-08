@@ -100,7 +100,7 @@ class hangman
 					System.out.println(ANSI_YELLOW+"=== Lettera "+guess+" trovata!"+ANSI_RESET);
 				}else
 				{
-					System.out.println(ANSI_YELLOW+"Lettera "+guess+" NON trovata!"+ANSI_RESET);
+					System.out.println(ANSI_RED+"Lettera "+guess+" NON trovata!"+ANSI_RESET);
 					tentativi--; //Togli un tentativo da quelli dell'utente
 				}
 				//Resetta la flag
@@ -120,6 +120,7 @@ class hangman
 				//Se la parola è finita, fai finire il programma
 				if(finita == true)
 				{
+					System.out.println(ANSI_GREEN+"=== La parola era: " + ANSI_YELLOW + pool[randomIndex] + ANSI_GREEN + "!" + ANSI_RESET);
 					System.out.println(ANSI_GREEN+"=== Hai tovato tutte le lettere!"+ANSI_RESET);
 					break;
 				}
