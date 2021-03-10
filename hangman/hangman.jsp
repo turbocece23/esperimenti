@@ -276,6 +276,9 @@
 				<%
 					if(request.getParameter("indiceGET") != null) {
 						out.println("<input type=\"number\" hidden name=\"indiceGET\" value=\"" + indice + "\">");
+					} else {
+						Random ran = new Random();
+						out.println("<input type=\"number\" hidden name=\"indiceGET\" value=\"" + ran.nextInt(pool.length) + "\">");
 					}
 
 					//Se l'utente non vuole scegliere una nuova parola e la partita non è ancora finita
